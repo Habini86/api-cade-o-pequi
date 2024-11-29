@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum FruitType {
+  Pequi
+  Buriti
+  Mangaba
+  Cagaita
+  Araticum
+  Guabiroba
+  Murici
+  Mama_cadela
+  Baru
+  Bocaiuva
+}
+
+// Modelo para usuários
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  phone         String
+  city          String
+  state         String
+  password_Hash String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  userFruits UserFruit[]
+
+  @@map("users")
+}
+
+// Modelo para frutas
+model Fruit {
+  id          String    @id @default(cuid())
+  name        FruitType
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  userFruits  UserFruit[]
+  fruitLocals FruitLocal[]
+
+  @@map("fruits")
+}
+
+// Modelo para locais
+model Local {
+  id        String   @id @default(cuid())
+  street    String
+  cep       String
+  city      String
+  state     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  fruitLocals FruitLocal[]
+
+  @@map("locals")
+}
+
+// Modelo para a relação entre frutas e locais
+model FruitLocal {
+  fruit      Fruit       @relation(fields: [fruitId], references: [id])
+  fruitId    String
+  local      Local       @relation(fields: [localId], references: [id])
+  localId    String
+  userFruits UserFruit[]
+
+  @@id([fruitId, localId])
+  @@map("fruit_locals")
+}
+
+// Modelo para a relação entre usuários e frutas
+model UserFruit {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  fruit     Fruit    @relation(fields: [fruitId], references: [id])
+  fruitId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  localFruit   FruitLocal @relation(fields: [localFruitId, localId], references: [fruitId, localId])
+  localFruitId String
+  localId      String
+
+  @@id([userId, fruitId])
+  @@map("user_fruits")
+}
