@@ -6,7 +6,7 @@ export interface findManyQuery {
   state?: string
 }
 
-export interface FruitsRepository {
+export interface FruitRepository {
   create(data: Prisma.FruitUncheckedCreateInput): Promise<Fruit>
   findById(id: string): Promise<Fruit | null>
   findMany(page: number, query?: findManyQuery): Promise<Fruit[]>

@@ -31,8 +31,7 @@ model User {
   password_Hash String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-
-  userFruits UserFruit[]
+  Fruit         Fruit[]
 
   @@map("users")
 }
@@ -40,57 +39,18 @@ model User {
 // Modelo para frutas
 model Fruit {
   id          String    @id @default(cuid())
-  name        FruitType
+  name        FruitType @unique
   description String
+  street      String
+  cep         String
+  city        String
+  state       String
+  number      Int?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  userFruits  UserFruit[]
-  fruitLocals FruitLocal[]
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   @@map("fruits")
-}
-
-// Modelo para locais
-model Local {
-  id        String   @id @default(cuid())
-  street    String
-  cep       String
-  city      String
-  state     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  fruitLocals FruitLocal[]
-
-  @@map("locals")
-}
-
-// Modelo para a relação entre frutas e locais
-model FruitLocal {
-  fruit      Fruit       @relation(fields: [fruitId], references: [id])
-  fruitId    String
-  local      Local       @relation(fields: [localId], references: [id])
-  localId    String
-  userFruits UserFruit[]
-
-  @@id([fruitId, localId])
-  @@map("fruit_locals")
-}
-
-// Modelo para a relação entre usuários e frutas
-model UserFruit {
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  fruit     Fruit    @relation(fields: [fruitId], references: [id])
-  fruitId   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  localFruit   FruitLocal @relation(fields: [localFruitId, localId], references: [fruitId, localId])
-  localFruitId String
-  localId      String
-
-  @@id([userId, fruitId])
-  @@map("user_fruits")
 }

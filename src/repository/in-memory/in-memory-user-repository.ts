@@ -5,7 +5,7 @@ import { createId } from '@paralleldrive/cuid2'
 export class InMemoryUserRepository implements UserRepository {
   public items: User[] = []
 
-  async create(data: Prisma.UserCreateInput): Promise<User> {
+  async create(data: Prisma.UserCreateInput) {
     const user: User = {
       id: data.id ? data.id : createId(),
       email: data.email,
@@ -23,13 +23,13 @@ export class InMemoryUserRepository implements UserRepository {
     return user
   }
 
-  async findById(id: string): Promise<User | null> {
+  async findById(id: string) {
     const user = this.items.find((user) => user.id === id)
 
     return user || null
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string) {
     const user = this.items.find((user) => user.email === email)
 
     return user || null

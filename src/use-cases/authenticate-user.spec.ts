@@ -1,5 +1,4 @@
-import { User } from '@prisma/client'
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { UserRepository } from '../repository/user-repository'
 import { AuthenticateUserUseCase } from './authenticate-user'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
@@ -17,32 +16,39 @@ describe('AuthenticateUserUseCase', () => {
 
   it('should authenticate user with correct email and password', async () => {
     const password = 'password123'
-    const hashedPassword = await hash(password, 6)
 
-    const user: User = {
+    await userRepository.create({
       id: '1',
       name: 'John Doe',
       city: 'City',
       state: 'State',
       phone: '123456789',
       email: 'johndoe@example.com',
-      password_Hash: hashedPassword,
+      password_Hash: await hash(password, 6),
       createdAt: new Date(),
       updatedAt: new Date(),
-    }
+    })
 
-    vi.spyOn(userRepository, 'findByEmail').mockResolvedValue(user)
-
-    const response = await sut.execute({
+    const { user } = await sut.execute({
       email: 'johndoe@example.com',
       password,
     })
 
-    expect(response.user).toEqual(user)
+    expect(user.id).toEqual(expect.any(String))
   })
 
   it('should throw error if email is incorrect', async () => {
-    vi.spyOn(userRepository, 'findByEmail').mockResolvedValue(null)
+    await userRepository.create({
+      id: '1',
+      name: 'John Doe',
+      city: 'City',
+      state: 'State',
+      phone: '123456789',
+      email: 'johndoe@example.com',
+      password_Hash: await hash('password123', 6),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
 
     await expect(
       sut.execute({
@@ -54,21 +60,18 @@ describe('AuthenticateUserUseCase', () => {
 
   it('should throw error if password is incorrect', async () => {
     const password = 'password123'
-    const hashedPassword = await hash(password, 6)
 
-    const user: User = {
+    await userRepository.create({
       id: '1',
       name: 'John Doe',
       city: 'City',
       state: 'State',
       phone: '123456789',
       email: 'johndoe@example.com',
-      password_Hash: hashedPassword,
+      password_Hash: await hash(password, 6),
       createdAt: new Date(),
       updatedAt: new Date(),
-    }
-
-    vi.spyOn(userRepository, 'findByEmail').mockResolvedValue(user)
+    })
 
     await expect(
       sut.execute({

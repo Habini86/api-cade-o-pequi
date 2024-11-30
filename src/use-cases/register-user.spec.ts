@@ -4,10 +4,10 @@ import { RegisterUserUseCase } from '../use-cases/register-user'
 import { compare } from 'bcryptjs'
 import { OrganizationAlreadyExistsError } from './errors/user-already-exists-error'
 
-let sut: RegisterUserUseCase
-let usersRepository: InMemoryUserRepository
+describe('RegisterUserUseCase', () => {
+  let usersRepository: InMemoryUserRepository
+  let sut: RegisterUserUseCase
 
-describe('Register User Use Case', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUserRepository()
     sut = new RegisterUserUseCase(usersRepository)
@@ -57,7 +57,7 @@ describe('Register User Use Case', () => {
       password,
     })
 
-    await expect(() =>
+    await expect(
       sut.execute({
         name: 'JavaScript',
         city: 'any_city',
