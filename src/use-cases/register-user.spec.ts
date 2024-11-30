@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { InMemoryUserRepository } from '../repository/in-memory/in-memory-user-repository'
 import { RegisterUserUseCase } from '../use-cases/register-user'
 import { compare } from 'bcryptjs'
-import { OrganizationAlreadyExistsError } from './errors/user-already-exists-error'
+import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
 describe('RegisterUserUseCase', () => {
   let usersRepository: InMemoryUserRepository
@@ -66,6 +66,6 @@ describe('RegisterUserUseCase', () => {
         email: 'any_email',
         password,
       }),
-    ).rejects.toBeInstanceOf(OrganizationAlreadyExistsError)
+    ).rejects.toBeInstanceOf(UserAlreadyExistsError)
   })
 })
