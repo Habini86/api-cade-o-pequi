@@ -1,12 +1,12 @@
 ### Requisitos Funcionais
-- [] Deve ser possível cadastrar um usuário
-- [] Deve ser possível realizar login como usuário
+- [X] Deve ser possível cadastrar um usuário
+- [X] Deve ser possível realizar login como usuário
 - [] Deve ser possível cadastrar novas localizações das frutas
 - [] Deve ser possível listar todas as frutas disponíveis 
 - [] Deve ser possível listar informações de uma fruta específica
 
 ### Requisitos não funcionais
-- [] Para cadastrar um usuário são necessárias as seguintes informações: nome do responsável, e-mail, cidade, estado, senha e número de contato.
+- [X] Para cadastrar um usuário são necessárias as seguintes informações: nome do responsável, e-mail, cidade, estado, senha e número de contato.
   - A senha deverá ser armazenada com criptografia. 
 - [] Para autenticação é necessário que o usuário tenha um cadastro, necessitando das seguintes informações: e-mail e senha. Será gerado um token JWT.
 - [] Para cadastrar uma nova localização das frutas são necessárias as seguintes informações: nome da fruta, descrição, ID do usuário e localização.
@@ -22,5 +22,5 @@
 ### Regras de negocio 
 - [] Todos os filtros são opcionais
 - [] Uma fruta deve está ligado a um usuário
-- [] Não é permitido ter e-mails duplicados no sistema para diferentes usuários
+- [x] Não é permitido ter e-mails duplicados no sistema para diferentes usuários
 
